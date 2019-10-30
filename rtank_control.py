@@ -1,3 +1,5 @@
+#Uses mqtt from my previous project
+
 import paho.mqtt.client as mqtt
 from time import sleep
 from bluetooth import *
