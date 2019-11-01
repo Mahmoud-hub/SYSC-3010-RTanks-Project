@@ -19,9 +19,6 @@ BLEBas blebas;    // BAS (Battery Service) helper class instance
 //Stepper instance for ir turret
 Stepper turret(STEPS, 31, 11, 7, 15);
 Servo myservo;
-const int in_1 = 30 ;
-const int in_2 = 27 ;
-const int driveSpeedControlPin = A0;
 
 // Advanced function prototypes
 void startAdv(void);
@@ -29,8 +26,19 @@ void setupHRM(void);
 void connect_callback(uint16_t conn_handle);
 void disconnect_callback(uint16_t conn_handle, uint8_t reason);
 
+//USED PINS:
+// 7, 11, 15, 16, 27, 30, 31, A0, A1, 
+const int in_1 = 27 ;
+const int in_2 = 30 ;
+const int driveSpeedControlPin = A0;
+
 bool canOutput = true;//Allows easy control of print statements for testing purposes
 int pos = 0;
+int recPin = A1;
+int outputPin = 9;
+int ledState = false;
+int timeDelay = millis();
+int ledPin = LED_BUILTIN;
 
 void setup() {
   Serial.begin(115200);
@@ -74,21 +82,18 @@ void setup() {
   outputln("\nAdvertising");
   randomSeed(8);
   outputln("Ending setup");
+  pinSetup();
+
 }
 
 void loop() {
-  //  turret.setSpeed(0.01); // 1 rpm
-  //  turret.step(2038); // do 2038 steps -- corresponds to one revolution in one minute
-  //  delay(1000); // wait for one second
-  //  turret.setSpeed(6); // 6 rpm
-  //  turret.step(-2038);
-  //
 
   if ( Bluefruit.connected() ) {
     outputln("CONNECTED");
+    checkIR();
     pos =  (int)random(0, 180);
     moveToPos(pos);
-    driveMotor(true, 100);
-    delay(10000);
+    driveMotor(true, (int)random(0, 100));
+    delay(1000);
   }
 }
