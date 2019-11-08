@@ -113,8 +113,8 @@ void setupHRM(void)
   hrmc.setProperties(CHR_PROPS_READ);
   hrmc.setPermission(SECMODE_OPEN, SECMODE_OPEN);
   hrmc.setFixedLen(8);
-  //hrmc.setReadAuthorizeCallback(read_authorize_cb_t);  // Optionally capture CCCD updates
-  hrmc.setCccdWriteCallback(cccd_callback);
+  hrmc.setReadAuthorizeCallback(read_authorize_cb_t);  // Optionally capture CCCD updates
+  //hrmc.setCccdWriteCallback(cccd_callback);
   hrmc.begin();
   
 
@@ -154,16 +154,12 @@ void connect_callback(uint16_t conn_handle)
   output("Connected to ");
   outputln(central_name);
 }
-void read_authorize_cb_t(BLECharacteristic& chr, uint16_t cccd_value)
+void read_authorize_cb_t(BLECharacteristic& chr, ble_gatts_evt_read_t * request)
 {
   // Display the raw request packet
-  output("CCCD Updated: ");
-  //Serial.printBuffer(request->data, request->len);
-  Serial.print(cccd_value);
-  outputln("");
-
-  // Check the characteristic this CCCD update is associated with in case
-  // this handler is used for multiple CCCD records.
+  Serial.println("REUEST: ");
+  Serial.print(*request);
+  Serial.println();
  
 }
 /**
