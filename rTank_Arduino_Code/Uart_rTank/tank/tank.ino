@@ -158,13 +158,3 @@ void loop()
   // Request CPU to enter low-power mode until an event/interrupt occurs
   waitForEvent();
 }
-
-void runTank(){
-  if(setDrive){
-    driveMotor(x_val, y_val);
-  }else if(setSteer){
-    moveToPos(x_val, y_val);
-  }else if (setTurret){
-    moveTurret(x_val, y_val);
-  }
-}

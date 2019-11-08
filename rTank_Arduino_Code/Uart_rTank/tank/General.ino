@@ -68,3 +68,13 @@ void resetAll() {
   counter = 100;
   setAll(false, false, false);
 }
+
+void runTank(){
+  if(setDrive){
+    driveMotor(x_val, y_val);
+  }else if(setSteer){
+    moveToPos(x_val, y_val);
+  }else if (setTurret){
+    moveTurret(x_val, y_val);
+  }
+}
