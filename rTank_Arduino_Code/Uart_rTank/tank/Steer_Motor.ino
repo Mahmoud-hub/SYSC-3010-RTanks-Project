@@ -1,9 +1,15 @@
-void moveToPos(int x, int y){
-  int pos = 0;
-  if (pos < 56){
-    pos = 56;
-  }else if(pos > 124){
-    pos = 124;
+void moveToPos(int x, int y) {
+  if (x != 0 && y != 0) {
+    int pos = 90;
+    int angle = atan(y / x);
+    if (angle < 55 || angle > 270) { //Top right
+      pos = 55;
+    } else if (angle > 125 && angle < 270) { //Bottom right
+      pos = 125
+    } else {
+      pos = angle;
+    }
+
+    myservo.write(pos);
   }
-  myservo.write(pos); 
 }
