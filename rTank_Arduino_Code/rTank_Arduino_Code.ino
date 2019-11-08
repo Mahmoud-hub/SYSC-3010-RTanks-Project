@@ -1,99 +1,149 @@
-//Includes
 #include <bluefruit.h>
 #include <Stepper.h>
 #include <Servo.h>
+#include <math.h>
 
 //Definitions
 #define STEPS 2038
 
-//Bluetooth instances
-BLEService        hrms = BLEService(0x6666);
-BLECharacteristic hrmc = BLECharacteristic(UUID16_CHR_HEART_RATE_MEASUREMENT);
-BLECharacteristic bslc = BLECharacteristic(UUID16_CHR_BODY_SENSOR_LOCATION);
-BLECharacteristic control = BLECharacteristic(0x0001); //0000 -> can't be used
-
-//Bluetooth battery instances
-BLEDis bledis;    // DIS (Device Information Service) helper class instance
-BLEBas blebas;    // BAS (Battery Service) helper class instance
+// BLE Service
+BLEDis  bledis;  // device information
+BLEUart bleuart; // uart over ble
+BLEBas  blebas;  // battery
 
 //Stepper instance for ir turret
-Stepper turret(STEPS, 31, 11, 7, 15);
+Stepper turret(STEPS, A2, 11, 31, 30);
 Servo myservo;
 
-// Advanced function prototypes
-void startAdv(void);
-void setupHRM(void);
-void connect_callback(uint16_t conn_handle);
-void disconnect_callback(uint16_t conn_handle, uint8_t reason);
 
 //USED PINS:
-// 7, 11, 15, 16, 27, 30, 31, A0, A1, 
+// 7, 11, 15, 16, 27, 30, 31, A0, A1,
 const int in_1 = 27 ;
-const int in_2 = 30 ;
-const int driveSpeedControlPin = A0;
+const int in_2 = 15 ;
+const int driveSpeedControlPin = 7;
 
 bool canOutput = true;//Allows easy control of print statements for testing purposes
 int pos = 0;
 int recPin = A1;
-int outputPin = 9;
 int ledState = false;
 int timeDelay = millis();
 int ledPin = LED_BUILTIN;
+bool runTank = false;
+bool forDrive = false;
+bool forSteer = false;
+bool forTurret = false;
+int counter = 100;
+bool setY = false;
+bool setX = false;
 
-void setup() {
+int x_val = 0;
+int y_val = 0;
+
+void setup()
+{
   Serial.begin(115200);
   while ( !Serial ) delay(10);   // for nrf52840 with native usb
 
-  outputln("SmartBand Serial");
-  outputln("-----------------------\n");
+  Serial.println("UART_COM");
+  Serial.println("---------------------------\n");
 
-  // Initialise the Bluefruit module
-  outputln("Initialise the Bluefruit nRF52 module");
+  // Setup the BLE LED to be enabled on CONNECT
+  // Note: This is actually the default behaviour, but provided
+  // here in case you want to control this LED manually via PIN 19
+  Bluefruit.autoConnLed(true);
+
+  // Config the peripheral connection with maximum bandwidth
+  // more SRAM required by SoftDevice
+  // Note: All config***() function must be called before begin()
+  Bluefruit.configPrphBandwidth(BANDWIDTH_MAX);
+
   Bluefruit.begin();
-
-  // Set the advertised device name (keep it short!)
-  outputln("Setting Device Name to 'RTank'");
-  Bluefruit.setName("RTank");
-
-  // Set the connect/disconnect callback handlers
+  // Set max power. Accepted values are: -40, -30, -20, -16, -12, -8, -4, 0, 4
+  Bluefruit.setTxPower(4);
+  Bluefruit.setName("Bluefruit52");
+  //Bluefruit.setName(getMcuUniqueID()); // useful testing with multiple central connections
   Bluefruit.setConnectCallback(connect_callback);
   Bluefruit.setDisconnectCallback(disconnect_callback);
 
-  // Configure and Start the Device Information Service
-  outputln("Configuring the Device Information Service");
-  bledis.setManufacturer("RTank");
-  bledis.setModel("Universal 1");
+  // Configure and Start Device Information Service
+  bledis.setManufacturer("Adafruit Industries");
+  bledis.setModel("Bluefruit Feather52");
   bledis.begin();
 
-  // Start the BLE Battery Service and set it to 100%
-  outputln("Configuring the Battery Service");
+  // Configure and Start BLE Uart Service
+  bleuart.begin();
+
+  // Start BLE Battery Service
   blebas.begin();
   blebas.write(100);
 
-  // Setup the Heart Rate Monitor service using
-  // BLEService and BLECharacteristic classes
-  outputln("Configuring the Heart Rate Monitor Service");
-  setupHRM();
-
-  // Setup the advertising packet(s)
-  outputln("Setting up the advertising payload(s)");
+  // Set up and start advertising
   startAdv();
+
   myservo.attach(16);
-  outputln("\nAdvertising");
   randomSeed(8);
-  outputln("Ending setup");
   pinSetup();
 
+  outputln("Ending setup");
 }
 
-void loop() {
 
-  if ( Bluefruit.connected() ) {
-    outputln("CONNECTED");
-    checkIR();
-    pos =  (int)random(0, 180);
-    moveToPos(pos);
-    driveMotor(true, (int)random(0, 100));
-    delay(1000);
+
+void loop()
+{
+  // Forward data from HW Serial to BLEUART
+  //  while (Serial.available())
+  //  {
+  //    // Delay to wait for enough input, since we have a limited transmission buffer
+  //    delay(2);
+  //
+  //    uint8_t buf[64];
+  //    int count = Serial.readBytes(buf, sizeof(buf));
+  //    bleuart.write( buf, count );
+  //  }
+
+  // Forward from BLEUART to HW Serial
+  while ( bleuart.available() )
+  {
+    uint8_t ch;
+    ch = (uint8_t) bleuart.read();
+    if (ch == 10) {
+      runTank = true;
+      outputln("--------------");
+      output("x_val:  ");
+      output(x_val);
+      output("     y_val:  ");
+      outputln(y_val);
+      setAll(false, false, false);
+    }
+    
+    
+    
+    
+    else if (ch == 'd') {
+      output("Driving");
+      setAll(true, false, false);
+    } else if (ch == 's') {
+      setAll(false, true, false);
+      output("Steering");
+    } else if (ch == 't') {
+      output("Turret");
+      setAll(false, false, true);
+    } else {
+      if (ch >= 48 && ch <= 57) {
+        ch = ch - '0';
+
+      }
+    }
+    if (ch == 'x') {
+      setX = true;
+      setY = false;
+    } else if (ch == 'y') {
+      setX = false;
+      setY = true;
+    }
+    set_X_Y(ch);
   }
+  // Request CPU to enter low-power mode until an event/interrupt occurs
+  waitForEvent();
 }
