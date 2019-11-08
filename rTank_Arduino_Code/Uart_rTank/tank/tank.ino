@@ -45,8 +45,8 @@ void setup()
   Serial.begin(115200);
   while ( !Serial ) delay(10);   // for nrf52840 with native usb
 
-  Serial.println("UART_COM");
-  Serial.println("---------------------------\n");
+  outputln("UART_COM");
+  output("---------------------------\n");
 
   // Setup the BLE LED to be enabled on CONNECT
   // Note: This is actually the default behaviour, but provided
@@ -107,9 +107,9 @@ void loop()
   while ( bleuart.available() )
   {
     uint8_t ch;
+    
     ch = (uint8_t) bleuart.read();
     if (ch == 10) {
-      runTank = true;
       outputln("--------------");
       output("x_val:  ");
       output(x_val);
