@@ -1,7 +1,5 @@
 void pinSetup() {
   pinMode(ledPin, OUTPUT);
-  pinMode(outputPin, OUTPUT);
-  digitalWrite(outputPin, HIGH);
   pinMode(A0, OUTPUT);
 }
 void output(String txt) {
@@ -62,4 +60,11 @@ void setAll(bool drive, bool steer, bool turret) {
   forDrive = drive;
   forSteer = steer;
   forTurret = turret;
+}
+
+void resetAll() {
+  x_val = 0;
+  y_val = 0;
+  counter = 100;
+  setAll(false, false, false);
 }

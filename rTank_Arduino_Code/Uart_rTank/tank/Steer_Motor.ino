@@ -1,4 +1,5 @@
-void moveToPos(int pos){
+void moveToPos(int x, int y){
+  int pos = 0;
   if (pos < 56){
     pos = 56;
   }else if(pos > 124){

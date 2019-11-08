@@ -5,26 +5,27 @@
   1 1 BRAKE
 */
 
-void driveMotor(bool dir, int spd) {
-  int pwm = map(spd, 0, 100, 0, 255);
-  
+void driveMotor(int dir, int spd) {
+  int pwm = map(spd, 0, 999, 0, 255);
+
   output("SPEED: ");
   output(pwm);
-  
-  if (dir) {
+
+  if (dir == 1) {
     Serial.println("");
     Serial.println(dir);
     digitalWrite(in_1, HIGH) ;
     digitalWrite(in_2, LOW) ;
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(100);
-    digitalWrite(LED_BUILTIN, LOW);
-    
-  } else {
+  } else if (dir == 2) {
     digitalWrite(in_1, LOW) ;
     digitalWrite(in_2, HIGH);
-    
   }
-  analogWrite(driveSpeedControlPin, pwm) ;
-  
+  if (dir == 0) {
+    outputln("STOPPED");
+    analogWrite(driveSpeedControlPin, 0) ;
+  } else {
+    analogWrite(driveSpeedControlPin, pwm) ;
+  }
+
+
 }

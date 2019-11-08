@@ -4,7 +4,12 @@
 #include <math.h>
 
 //Definitions
-#define STEPS 2038
+//#define STEPS 2038
+#define STEPS 100
+#define on 7
+#define off 6
+#define STEPS_PER_MOTOR_REVOLUTION 32
+#define STEPS_PER_OUTPUT_REVOLUTION 32 * 64  //2048 
 
 // BLE Service
 BLEDis  bledis;  // device information
@@ -14,6 +19,7 @@ BLEBas  blebas;  // battery
 //Stepper instance for ir turret
 Stepper turret(STEPS, A2, 11, 31, 30);
 Servo myservo;
+
 
 
 //USED PINS:
@@ -28,7 +34,6 @@ int recPin = A1;
 int ledState = false;
 int timeDelay = millis();
 int ledPin = LED_BUILTIN;
-bool runTank = false;
 bool forDrive = false;
 bool forSteer = false;
 bool forTurret = false;
@@ -106,20 +111,26 @@ void loop()
   while ( bleuart.available() )
   {
     uint8_t ch;
-    
+
     ch = (uint8_t) bleuart.read();
     if (ch == 10) {
+
       outputln("--------------");
       output("x_val:  ");
       output(x_val);
       output("     y_val:  ");
       outputln(y_val);
-      setAll(false, false, false);
+
+      runTank();
+      
+      resetAll();
+
+      
     }
-    
-    
-    
-    
+
+
+
+
     else if (ch == 'd') {
       output("Driving");
       setAll(true, false, false);
@@ -146,4 +157,14 @@ void loop()
   }
   // Request CPU to enter low-power mode until an event/interrupt occurs
   waitForEvent();
+}
+
+void runTank(){
+  if(setDrive){
+    driveMotor(x_val, y_val);
+  }else if(setSteer){
+    moveToPos(x_val, y_val);
+  }else if (setTurret){
+    moveTurret(x_val, y_val);
+  }
 }
