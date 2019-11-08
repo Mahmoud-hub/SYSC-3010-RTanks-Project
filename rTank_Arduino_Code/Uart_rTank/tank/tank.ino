@@ -12,20 +12,19 @@ BLEUart bleuart; // uart over ble
 BLEBas  blebas;  // battery
 
 //Stepper instance for ir turret
-Stepper turret(STEPS, 31, 11, 7, 15);
+Stepper turret(STEPS, A2, 11, 31, 30);
 Servo myservo;
 
 
 //USED PINS:
 // 7, 11, 15, 16, 27, 30, 31, A0, A1,
 const int in_1 = 27 ;
-const int in_2 = 30 ;
-const int driveSpeedControlPin = A0;
+const int in_2 = 15 ;
+const int driveSpeedControlPin = 7;
 
 bool canOutput = true;//Allows easy control of print statements for testing purposes
 int pos = 0;
 int recPin = A1;
-int outputPin = 9;
 int ledState = false;
 int timeDelay = millis();
 int ledPin = LED_BUILTIN;
