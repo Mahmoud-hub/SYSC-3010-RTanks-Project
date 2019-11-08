@@ -1,8 +1,7 @@
-
 #include <bluefruit.h>
 #include <Stepper.h>
 #include <Servo.h>
-
+#include <math.h>
 
 //Definitions
 #define STEPS 2038
@@ -31,6 +30,15 @@ int ledState = false;
 int timeDelay = millis();
 int ledPin = LED_BUILTIN;
 bool runTank = false;
+bool forDrive = false;
+bool forSteer = false;
+bool forTurret = false;
+int counter = 100;
+bool setY = false;
+bool setX = false;
+
+int x_val = 0;
+int y_val = 0;
 
 void setup()
 {
@@ -100,28 +108,43 @@ void loop()
   {
     uint8_t ch;
     ch = (uint8_t) bleuart.read();
-    if(ch == 10){
+    if (ch == 10) {
       runTank = true;
-      Serial.println("");
-    }
-
-    if (ch >= 48 && ch <= 57) {
-      ch = ch - '0';
-      Serial.print(ch);
-    }
-    else {
-      if (ch == 'x') {
-        Serial.print("X");
-      }
-      if (ch == 'y') {
-        Serial.print(" Y");
-      }
+      outputln("--------------");
+      output("x_val:  ");
+      output(x_val);
+      output("     y_val:  ");
+      outputln(y_val);
+      setAll(false, false, false);
     }
     
+    
+    
+    
+    else if (ch == 'd') {
+      output("Driving");
+      setAll(true, false, false);
+    } else if (ch == 's') {
+      setAll(false, true, false);
+      output("Steering");
+    } else if (ch == 't') {
+      output("Turret");
+      setAll(false, false, true);
+    } else {
+      if (ch >= 48 && ch <= 57) {
+        ch = ch - '0';
+
+      }
+    }
+    if (ch == 'x') {
+      setX = true;
+      setY = false;
+    } else if (ch == 'y') {
+      setX = false;
+      setY = true;
+    }
+    set_X_Y(ch);
   }
-
-
-
   // Request CPU to enter low-power mode until an event/interrupt occurs
   waitForEvent();
 }
