@@ -141,7 +141,10 @@ void loop()
     } else if (ch == 't') {
       output("Turret");
       setAll(false, false, true);
-    } else {
+    } else if(){
+      runTests();
+    }else {
+    }
       if (ch >= 48 && ch <= 57) {
         ch = ch - '0';
 
