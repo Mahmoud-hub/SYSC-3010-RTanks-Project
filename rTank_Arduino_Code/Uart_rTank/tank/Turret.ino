@@ -9,3 +9,7 @@ void moveTurret(int x, int y) {
   turret.setSpeed(500);
   turret.step(move_degrees);
 }
+
+void zeroTurret(){
+  myservo.write(90);
+}

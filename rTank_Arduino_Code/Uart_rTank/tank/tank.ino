@@ -141,7 +141,7 @@ void loop()
     } else if (ch == 't') {
       output("Turret");
       setAll(false, false, true);
-    } else if(){
+    } else if(ch = 'l'){
       runTests();
     }else {
     }

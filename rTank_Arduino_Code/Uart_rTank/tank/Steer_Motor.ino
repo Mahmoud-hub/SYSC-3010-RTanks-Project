@@ -17,3 +17,6 @@ void moveToPos(int x, int y) {
     myservo.write(pos);
   }
 }
+void zeroSteering(){
+  myservo.write(90);
+}

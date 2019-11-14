@@ -5,7 +5,7 @@
   1 1 BRAKE
 */
 
-void driveMotor(int dir, int spd) {
+void driveMotor(int spd, int dir) {
   output("Drive:X:  ");
   output(spd);
   output("   Y:  ");
