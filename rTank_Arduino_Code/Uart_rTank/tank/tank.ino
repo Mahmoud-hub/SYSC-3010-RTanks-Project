@@ -40,6 +40,7 @@ bool forTurret = false;
 int counter = 100;
 bool setY = false;
 bool setX = false;
+int cur_degrees = 0;
 
 int x_val = 0;
 int y_val = 0;

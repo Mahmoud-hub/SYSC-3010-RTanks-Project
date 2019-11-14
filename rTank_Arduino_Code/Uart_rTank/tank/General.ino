@@ -70,11 +70,11 @@ void resetAll() {
 }
 
 void runTank(){
-  if(setDrive){
+  if(forDrive){
     driveMotor(x_val, y_val);
-  }else if(setSteer){
+  }else if(forSteer){
     moveToPos(x_val, y_val);
-  }else if (setTurret){
+  }else if (forTurret){
     moveTurret(x_val, y_val);
   }
 }
