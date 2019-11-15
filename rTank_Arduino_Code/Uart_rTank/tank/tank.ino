@@ -17,7 +17,7 @@ BLEUart bleuart; // uart over ble
 BLEBas  blebas;  // battery
 
 //Stepper instance for ir turret
-Stepper turret(STEPS, A2, 11, 31, 30);
+Servo turret;
 Servo myservo;
 
 
@@ -85,7 +85,7 @@ void setup()
 
   // Set up and start advertising
   startAdv();
-
+  myservo.attach(30)
   myservo.attach(16);
   randomSeed(8);
   pinSetup();
@@ -109,11 +109,15 @@ void loop()
   //  }
 
   // Forward from BLEUART to HW Serial
+
+  
   while ( bleuart.available() )
   {
+    checkForIr();
     uint8_t ch;
 
     ch = (uint8_t) bleuart.read();
+    
     if (ch == 10) {
 
       outputln("--------------");
@@ -126,13 +130,7 @@ void loop()
       
       resetAll();
 
-      
-    }
-
-
-
-
-    else if (ch == 'd') {
+    }else if (ch == 'd') {
       output("Driving");
       setAll(true, false, false);
     } else if (ch == 's') {
@@ -144,6 +142,7 @@ void loop()
     } else if(ch = 'l'){
       runTests();
     }else {
+      
     }
       if (ch >= 48 && ch <= 57) {
         ch = ch - '0';

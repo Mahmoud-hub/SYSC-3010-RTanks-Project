@@ -2,14 +2,22 @@ void moveTurret(int x, int y) {
   output("Moving turret to:X:  ");    output(x);
   output("   Y:  ");
   outputln(y);
-  int degress_per_step = STEPS_PER_OUTPUT_REVOLUTION / 360;
-  int new_degrees = atan(y / x);
-  int move_degrees = new_degrees - cur_degrees;
-  cur_degrees = new_degrees;
-  turret.setSpeed(500);
-  turret.step(move_degrees);
-}
+  if (x != 0 && y != 0) {
+    int pos = 90;
+    int angle = atan(y / x);
+    if (angle < 55 || angle > 270) { //Top right
+      pos = 55;
+    } else if (angle > 125 && angle < 270) { //Bottom right
+      pos = 125;
+    } else {
+      pos = angle;
+    }
 
+    myservo.write(pos);
+  }else{
+    myservo.write(90);
+  }
+}
 void zeroTurret(){
   myservo.write(90);
 }

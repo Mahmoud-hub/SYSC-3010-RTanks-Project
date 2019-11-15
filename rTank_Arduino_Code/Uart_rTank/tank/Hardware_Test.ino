@@ -8,13 +8,13 @@ void runTests() {
   driveMotor(999, 1);
   delay(1000);
   driveMotor(0, 0);
-  delay(1000);
+  delay(200);
   driveMotor(200, 2);
   delay(1000);
   driveMotor(999, 2);
   delay(1000);
   driveMotor(0, 0);
-  delay(1000);
+  delay(200);
   
   outputln("Testing Steering");
   moveToPos(-1, 1);
@@ -31,4 +31,15 @@ void runTests() {
   delay(1000);
   zeroTurret();
   delay(1000);
+
+  runStub();
+}
+
+void runStub(){
+  uint8_t buf[64];
+  buf[0] = 234;
+  int len = (buf, sizeof(buf));
+  output("COUNT");
+  ouplutln(len);
+  hitDetected(buf, len);
 }

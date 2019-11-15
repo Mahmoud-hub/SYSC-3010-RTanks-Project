@@ -15,3 +15,6 @@ void checkIR() {
     }
   }
 }
+void hitDetected(uint8_t *value, int len){
+  bleuart.write( value, len );
+}
