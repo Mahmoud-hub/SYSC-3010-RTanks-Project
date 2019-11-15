@@ -85,7 +85,7 @@ void setup()
 
   // Set up and start advertising
   startAdv();
-  myservo.attach(30)
+  turret.attach(30);
   myservo.attach(16);
   randomSeed(8);
   pinSetup();
@@ -110,14 +110,14 @@ void loop()
 
   // Forward from BLEUART to HW Serial
 
-  
+
   while ( bleuart.available() )
   {
     checkForIr();
     uint8_t ch;
 
     ch = (uint8_t) bleuart.read();
-    
+
     if (ch == 10) {
 
       outputln("--------------");
@@ -127,10 +127,10 @@ void loop()
       outputln(y_val);
 
       runTank();
-      
+
       resetAll();
 
-    }else if (ch == 'd') {
+    } else if (ch == 'd') {
       output("Driving");
       setAll(true, false, false);
     } else if (ch == 's') {
@@ -139,16 +139,14 @@ void loop()
     } else if (ch == 't') {
       output("Turret");
       setAll(false, false, true);
-    } else if(ch = 'l'){
+    } else if (ch = 'l') {
       runTests();
-    }else {
-      
-    }
-      if (ch >= 48 && ch <= 57) {
-        ch = ch - '0';
+    } 
+    if (ch >= 48 && ch <= 57) {
+      ch = ch - '0';
 
-      }
     }
+
     if (ch == 'x') {
       setX = true;
       setY = false;

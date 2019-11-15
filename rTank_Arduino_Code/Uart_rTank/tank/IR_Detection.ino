@@ -1,4 +1,4 @@
-void checkIR() {
+void checkForIr() {
   int reading = analogRead(recPin);
 
   if (reading < 4) {

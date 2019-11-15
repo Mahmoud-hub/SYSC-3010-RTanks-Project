@@ -40,6 +40,6 @@ void runStub(){
   buf[0] = 234;
   int len = (buf, sizeof(buf));
   output("COUNT");
-  ouplutln(len);
+  outputln(len);
   hitDetected(buf, len);
 }
