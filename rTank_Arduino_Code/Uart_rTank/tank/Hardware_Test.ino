@@ -32,7 +32,7 @@ void runTests() {
   zeroTurret();
   delay(1000);
 
-  runStub();
+  //runStub();
 }
 
 void runStub(){

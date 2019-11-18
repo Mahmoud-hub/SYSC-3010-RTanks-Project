@@ -117,8 +117,11 @@ void loop()
     uint8_t ch;
 
     ch = (uint8_t) bleuart.read();
-
-    if (ch == 10) {
+    Serial.println();
+    Serial.print("CH: ");
+    Serial.write(ch);
+    Serial.println();
+    if (ch == 'e') {
 
       outputln("--------------");
       output("x_val:  ");
@@ -139,12 +142,12 @@ void loop()
     } else if (ch == 't') {
       output("Turret");
       setAll(false, false, true);
-    } else if (ch = 'l') {
+    } else if (ch == 'l') {
+      outputln("Testing");
       runTests();
     } 
     if (ch >= 48 && ch <= 57) {
       ch = ch - '0';
-
     }
 
     if (ch == 'x') {

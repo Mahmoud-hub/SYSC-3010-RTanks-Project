@@ -5,7 +5,7 @@
  */
 
 // The number of AA cells in your battery holder
-Cell_Count = 2;
+Cell_Count = 8;
 
 
 /*
