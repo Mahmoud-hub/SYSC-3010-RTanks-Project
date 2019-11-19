@@ -14,9 +14,9 @@ void moveToPos(int x, int y) {
       pos = angle;
     }
 
-    myservo.write(pos);
+    steeringServo.write(pos);
   }
 }
 void zeroSteer(){
-  myservo.write(90);
+  steeringServo.write(90);
 }

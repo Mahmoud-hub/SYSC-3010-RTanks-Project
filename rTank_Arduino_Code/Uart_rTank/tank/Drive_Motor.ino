@@ -10,10 +10,8 @@ void driveMotor(int spd, int dir) {
   output(spd);
   output("   Y:  ");
   outputln(dir);
+  
   int pwm = map(spd, 0, 999, 0, 255);
-
-  //output("SPEED: ");
-  //output(pwm);
 
   if (dir == 1) {
     Serial.println("");

@@ -1,5 +1,6 @@
 void moveTurret(int x, int y) {
-  output("Moving turret to:X:  ");    output(x);
+  output("Moving turret to:X:  ");    
+  output(x);
   output("   Y:  ");
   outputln(y);
   if (x != 0 && y != 0) {
