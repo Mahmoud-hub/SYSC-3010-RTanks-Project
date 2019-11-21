@@ -1,7 +1,7 @@
 // Initlizes the Digital pins
 void pinSetup() {
   pinMode(A0, OUTPUT);
-  turret.attach(30);
+  turret.attach(15);
   steeringServo.attach(16);
 }
 
@@ -75,7 +75,8 @@ void resetAll() {
 //sends data to motor thats toggled
 void runTank() {
   if (forDrive) {
-    driveMotor(x_val, y_val);
+    runMotor(2000, true);
+    //driveMotor(x_val, y_val);
   } else if (forSteer) {
     moveToPos(x_val, y_val);
   } else if (forTurret) {

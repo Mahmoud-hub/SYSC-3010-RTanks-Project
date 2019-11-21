@@ -5,29 +5,33 @@
   1 1 BRAKE
 */
 
-void driveMotor(int spd, int dir) {
-  output("Drive:X:  ");
+void driveMotor(int spd) {
+  output("Drive:SPD:  ");
   output(spd);
-  output("   Y:  ");
-  outputln(dir);
+  
   
   int pwm = map(spd, 0, 999, 0, 255);
+  output("Drive:PWM:  ");
+  output(pwm);
+  digitalWrite( driveSpeedControlPin, pwm);
 
-  if (dir == 1) {
-    Serial.println("");
-    Serial.println(dir);
-    digitalWrite(in_1, HIGH) ;
-    digitalWrite(in_2, LOW) ;
-  } else if (dir == 2) {
-    digitalWrite(in_1, LOW) ;
-    digitalWrite(in_2, HIGH);
+
+}
+
+void runMotor(int distance, bool dir) {
+
+  if (dir) {//Controls direction
+
+    Serial.println("Motor Running forwards");
+    lastDebounceTime = millis(); // For deboucing
+    stepper_NEMA17.setSpeed(100);
+    stepper_NEMA17.step(distance);
+
+  } else if (!dir) {
+
+    Serial.println("Motor Running forwardd)");
+    lastDebounceTime = millis(); // For deboucing
+    stepper_NEMA17.setSpeed(100);
+    stepper_NEMA17.step(-distance);
   }
-  if (dir == 0) {
-    outputln("STOPPED");
-    analogWrite(driveSpeedControlPin, 0) ;
-  } else {
-    analogWrite(driveSpeedControlPin, pwm) ;
-  }
-
-
 }

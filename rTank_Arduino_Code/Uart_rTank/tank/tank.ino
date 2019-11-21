@@ -4,6 +4,7 @@
 #include <Servo.h>
 #include <math.h>
 
+
 // BLE Service
 BLEDis  bledis;  // device information
 BLEUart bleuart; // uart over ble
@@ -12,13 +13,15 @@ BLEBas  blebas;  // battery
 //Stepper instance for ir turret and steering
 Servo turret;
 Servo steeringServo;
-
+const int STEPS_PER_REV = 200;
+Stepper stepper_NEMA17(STEPS_PER_REV, 27, 30, 11, 7);
+unsigned long lastDebounceTime = 0;  // the last time the output pin was toggled
+unsigned long debounceDelay = 50;
 //USED PINS:
 // 7, 11, 15, 16, 27, 30, 31, A0, A1,
-const int in_1 = 27 ;
-const int in_2 = 15 ;
-const int driveSpeedControlPin = 7;
-
+const int motorHigh = 27 ;
+const int motorGround = 15 ;
+const int driveSpeedControlPin = 31;
 bool canOutput = true;//Allows easy control of print statements for testing purposes
 int recieverPin = A1; //Pin to recieve ir data (if tank is hit)
 
@@ -57,7 +60,7 @@ void setup()
 void loop()
 {
   while ( bleuart.available() ){ // While the tank is connected to a phone
-    checkForIr(); // Check if the tank has been hit
+    //checkForIr(); // Check if the tank has been hit
 
     //Reads the data that is coming into the bluefruit
     uint8_t incomingData;
