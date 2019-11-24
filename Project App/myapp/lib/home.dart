@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/login.dart';
+import 'package:myapp/select.dart';
+import 'flutter_fire_auth.dart';
 
 class FirstRoute extends StatelessWidget {
   @override
@@ -18,10 +19,14 @@ class FirstRoute extends StatelessWidget {
               alignment: Alignment.center,
               child: OutlineButton(
                 splashColor: Colors.grey,
-                onPressed: () {
+                onPressed: () async {
+                  bool res = await AuthProvider().loginWithGoogle();
+                  if(!res)
+                    print("error logging in with google");
+
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
+                    MaterialPageRoute(builder: (context) => SelectPage()),
                   );
                 },
                 shape:
@@ -54,7 +59,7 @@ class FirstRoute extends StatelessWidget {
         ]));
   }
 }
-
+/*
 class SecondRoute extends StatelessWidget {
   @override
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
@@ -125,3 +130,4 @@ class SecondRoute extends StatelessWidget {
         ]));
   }
 }
+*/

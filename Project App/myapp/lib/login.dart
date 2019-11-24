@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/select.dart';
 import 'flutter_fire_auth.dart';
 
 class LoginPage extends StatefulWidget {
@@ -20,13 +21,22 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const SizedBox(height: 100.0),
+      body: new Stack(children: <Widget>[
+          new Container(
+            decoration: new BoxDecoration(
+              image: new DecorationImage(
+                image: new AssetImage("Images/Game Background.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(height: 100.0),
               Text("Login", style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20.0
@@ -38,6 +48,11 @@ class _LoginPageState extends State<LoginPage> {
                   bool res = await AuthProvider().loginWithGoogle();
                   if(!res)
                     print("error logging in with google");
+                  
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SelectPage()),
+                  );
                 },
               ),
               TextField(
@@ -72,6 +87,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+      ])
     );
   }
 }
