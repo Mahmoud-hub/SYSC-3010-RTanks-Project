@@ -8,7 +8,7 @@ import 'package:control_pad/models/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-//import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 bool stubTest = false;
 String UUID= "";
@@ -29,7 +29,7 @@ class MainScreen extends StatelessWidget {
     return MaterialApp(
       title: 'Joypad with BLE',
       debugShowCheckedModeBanner: false,
-      home: SelectPage(),
+      home: JoyPad(),
       theme: ThemeData.dark(),
     );
   }
@@ -40,52 +40,6 @@ class JoyPad extends StatefulWidget {
   _JoyPadState createState() => _JoyPadState();
 
 }
-
-class SelectPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: new Stack(children: <Widget>[
-          new Container(
-            decoration: new BoxDecoration(
-              image: new DecorationImage(
-                image: new AssetImage("images/nudes.png"),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Align(alignment: Alignment.centerRight,
-              child: OutlineButton(
-                splashColor: Colors.grey,
-                onPressed: () {
-                  UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
-                  CharUUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
-                  name = "Bluefruit52";
-                  Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => JoyPad())
-                  );
-                },
-                child: Text('Red Tank')
-              ),
-            ),
-            Align(alignment: Alignment.centerLeft,
-              child: OutlineButton(
-                splashColor: Colors.grey,
-                onPressed: () {
-                  UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
-                  CharUUID= "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
-                  name = "Bluefruit51";
-                  Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => JoyPad())
-                  );
-                },
-                child: Text('Blue Tank'),
-              ),
-            )
-        ]));
-  }
-}
-
 
 class _JoyPadState extends State<JoyPad> {
   final String SERVICE_UUID = UUID;
