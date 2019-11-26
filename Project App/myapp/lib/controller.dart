@@ -8,13 +8,10 @@ import 'package:control_pad/models/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:myapp/select.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 bool stubTest = false;
-String UUID= "";
-String CharUUID = "";
-String name = "";
-
 
 Future<void> main() async {
   await SystemChrome.setPreferredOrientations(
@@ -38,13 +35,15 @@ class MainScreen extends StatelessWidget {
 class JoyPad extends StatefulWidget {
   @override
   _JoyPadState createState() => _JoyPadState();
-
 }
 
 class _JoyPadState extends State<JoyPad> {
-  final String SERVICE_UUID = UUID;
-  final String CHARACTERISTIC_UUID = CharUUID;
-  final String TARGET_DEVICE_NAME = name;
+  //String UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
+  //String CharUUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
+  //String name = "Bluefruit52";
+  final String SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
+  final String CHARACTERISTIC_UUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
+  final String TARGET_DEVICE_NAME = "Bluefruit52";
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
   StreamSubscription<ScanResult> scanSubScription;
@@ -60,8 +59,8 @@ class _JoyPadState extends State<JoyPad> {
     if (stubTest == false) {
       startScan();
       setState(() {
-          connectionText = "Found Target Device";
-     });
+        connectionText = "Found Target Device";
+      });
     }
   }
 
@@ -115,8 +114,7 @@ class _JoyPadState extends State<JoyPad> {
     });
   }
 
-  String _dataParser(List<int> fromDevice){
-
+  String _dataParser(List<int> fromDevice) {
     return utf8.decode(fromDevice);
   }
 
@@ -140,10 +138,6 @@ class _JoyPadState extends State<JoyPad> {
     });
   }
 
-  readData(){
-
-  }
-
   writeData(String data) {
     if (targetCharacteristic == null) return;
 
@@ -154,63 +148,56 @@ class _JoyPadState extends State<JoyPad> {
 
   @override
   Widget build(BuildContext context) {
-    String data1 = "";
-    String data2 = "";
-    String data3 = "";
+    String directionData = "";
+    String steerData = "";
+    String turretData = "";
     JoystickDirectionCallback onDirectionChanged(
         double degrees, double distance) {
+      //SHift degrees by 90 degrees clockwise
       double y = (distance * sin(degrees * pi / 180.0));
       double x = (distance * cos(degrees * pi / 180.0));
       int magnitude = (x.abs() * 999.0).round();
 
-      if (degrees<90 || degrees>270) {
-        data1 = "dx${magnitude}y1e";
+      if (degrees < 90 || degrees > 270) {
+        directionData = "dx${magnitude}y1e";
       } else {
-        data1 = "dx${magnitude}y0e";
+        directionData = "dx${magnitude}y0e";
       }
 
       //int steer_direction = ((x*499)+499).round() ;
       int steer = ((y * 499) + 499).round();
 
-      String data2 = "sx${steer}y${steer}e";
+      steerData = "sx${steer}y${steer}e";
 
       if (stubTest == false) {
-        writeData(data1);
-        writeData(data2);
+        writeData(directionData);
+        writeData(steerData);
       }
       if (stubTest == true) {
         setState(() {
-          connectionText = data1 + " " + data2 +  " " +data3;
-
-     });
-        
+          connectionText = directionData + " " + steerData + " " + turretData;
+        });
       }
     }
 
     PadButtonPressedCallback padButtonPressedCallback(
         int buttonIndex, Gestures gesture) {
-      String data = "";
       if (buttonIndex == 0) {
-        data = "tx074y190e";
+        turretData = "tx074y190e";
       }
-      if (buttonIndex ==1){
-        
-      }
+      if (buttonIndex == 1) {}
       if (buttonIndex == 2) {
-        data = "tx900y800e";
+        turretData = "tx900y800e";
       }
-      if (buttonIndex==3){
-
-      }
+      if (buttonIndex == 3) {}
 
       if (stubTest == false) {
-        writeData(data);
+        writeData(turretData);
       }
       if (stubTest == true) {
         setState(() {
-          connectionText = data1 + " " + data2 +  " " +data3;
-
-     });
+          connectionText = directionData + " " + steerData + " " + turretData;
+        });
       }
     }
 
