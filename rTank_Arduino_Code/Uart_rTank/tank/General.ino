@@ -54,6 +54,11 @@ void set_X_Y(uint8_t incomingData) {
     }
   }
 }
+void magicPeaShooter(){
+  digitalWrite(emitterPin, HIGH);
+  delay(1);
+  digitalWrite(emitterPin, LOW);
+}
 
 //Sets all motor controls
 void setAll(bool drive, bool steer, bool turret) {

@@ -60,7 +60,7 @@ void setup()
 void loop()
 {
   while ( bleuart.available() ){ // While the tank is connected to a phone
-    //checkForIr(); // Check if the tank has been hit
+    checkForIr(); // Check if the tank has been hit
 
     //Reads the data that is coming into the bluefruit
     uint8_t incomingData;
@@ -106,7 +106,9 @@ void loop()
       setX = false;
       setY = true;
       
-    } else { //catch all that resets the markers
+    }  else if (incomingData == 'b') { //Toggles the steering motor
+      magicPeaShooter();
+    }else { //catch all that resets the markers
       resetAll();
       outputln("RESET");
     }
