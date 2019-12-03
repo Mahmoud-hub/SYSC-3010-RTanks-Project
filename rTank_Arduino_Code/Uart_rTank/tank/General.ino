@@ -1,6 +1,8 @@
 // Initlizes the Digital pins
 void pinSetup() {
-  pinMode(A0, OUTPUT);
+  pinMode(emitterPin, OUTPUT);
+  pinMode(recieverPin1, INPUT);
+  pinMode(recieverPin2, INPUT);
   turret.attach(15);
   steeringServo.attach(16);
 }
@@ -37,15 +39,15 @@ void set_X_Y(uint8_t incomingData) {
   if (incomingData >= 0 && incomingData <= 9 ) { //checks to see if the variable is between 0-9
 
     if (setX && !setY) { // checks to see if setX = 1 and setY = 0
-      x_val = x_val + incomingData* multiplier; //adds new number * multiplier to x_val
+      x_val = x_val + incomingData * multiplier; //adds new number * multiplier to x_val
       if (multiplier == 1) {
         multiplier = 100; // resets multiplier
       } else {
         multiplier = multiplier / 10; //reduces mutiplier
       }
-      
+
     } else if (setY && !setX) { // checks to see if setY = 1 and setX = 0
-      y_val = y_val + incomingData* multiplier ; //adds new number * multiplier to y_val
+      y_val = y_val + incomingData * multiplier ; //adds new number * multiplier to y_val
       if (multiplier == 1) {
         multiplier = 100; // resets multiplier
       } else {
@@ -54,7 +56,7 @@ void set_X_Y(uint8_t incomingData) {
     }
   }
 }
-void magicPeaShooter(){
+void magicPeaShooter() {
   digitalWrite(emitterPin, HIGH);
   delay(1);
   digitalWrite(emitterPin, LOW);
@@ -79,9 +81,11 @@ void resetAll() {
 
 //sends data to motor thats toggled
 void runTank() {
-  if (forDrive) {
-    runMotor(2000, true);
-    //driveMotor(x_val, y_val);
+  if (forDrive && forSteer && forTurret) {
+    outputln("b for bullet");
+    shootLazer();
+  } else if (forDrive) {
+    runMotor(x_val, y_val);
   } else if (forSteer) {
     moveToPos(x_val, y_val);
   } else if (forTurret) {
