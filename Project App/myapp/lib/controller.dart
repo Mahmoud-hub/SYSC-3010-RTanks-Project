@@ -8,8 +8,8 @@ import 'package:control_pad/models/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:myapp/select.dart';
-import 'package:firebase_database/firebase_database.dart';
+//import 'package:myapp/select.dart';
+//import 'package:firebase_database/firebase_database.dart';
 
 bool stubTest = false;
 
@@ -38,23 +38,23 @@ class JoyPad extends StatefulWidget {
 }
 
 class _JoyPadState extends State<JoyPad> {
-  //String UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
-  //String CharUUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
-  //String name = "Bluefruit52";
+  // String UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
+  // String CharUUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
+  // String name = "Bluefruit52";
   final String SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
   final String CHARACTERISTIC_UUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
   final String TARGET_DEVICE_NAME = "Bluefruit52";
 
-  FlutterBlue flutterBlue = FlutterBlue.instance;
-  StreamSubscription<ScanResult> scanSubScription;
+   FlutterBlue flutterBlue = FlutterBlue.instance;
+   StreamSubscription<ScanResult> scanSubScription;
 
-  BluetoothDevice targetDevice;
-  BluetoothCharacteristic targetCharacteristic;
+   BluetoothDevice targetDevice;
+   BluetoothCharacteristic targetCharacteristic;
 
-  String connectionText = "";
+   String connectionText = "";
 
-  @override
-  void initState() {
+   @override
+   void initState() {
     super.initState();
     if (stubTest == false) {
       startScan();
@@ -175,7 +175,7 @@ class _JoyPadState extends State<JoyPad> {
       }
       if (stubTest == true) {
         setState(() {
-          connectionText = directionData + " " + steerData + " " + turretData;
+         connectionText = directionData + " " + steerData + " " + turretData;
         });
       }
     }
@@ -192,7 +192,7 @@ class _JoyPadState extends State<JoyPad> {
       if (buttonIndex == 3) {}
 
       if (stubTest == false) {
-        writeData(turretData);
+        //writeData(turretData);
       }
       if (stubTest == true) {
         setState(() {
@@ -206,7 +206,8 @@ class _JoyPadState extends State<JoyPad> {
         title: Text(connectionText),
       ),
       body: Container(
-        child: targetCharacteristic == null && stubTest == false
+        // targetCharacteristic == null &&
+        child:  stubTest == false
             ? Center(
                 child: Text(
                   "Waiting...",
