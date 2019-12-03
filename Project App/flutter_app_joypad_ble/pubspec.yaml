@@ -27,6 +27,7 @@ dependencies:
   flutter_blue: ^0.6.3+1
   firebase_auth: ^0.14.0+5
   google_sign_in: ^4.0.7
+  firebase_database: ^3.1.0
 
 
 dev_dependencies:
