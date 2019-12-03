@@ -253,7 +253,7 @@ class _JoyPadState extends State<JoyPad> {
       }
       data = "tx${turretX}y${turretY}e";
       if (buttonIndex == 3) {
-        data = "s";
+        data = "b";
         //disconnectFromDevice();
       }
 
