@@ -217,14 +217,10 @@ class _JoyPadState extends State<JoyPad> {
         double x = (distance * cos(degrees * pi / 180.0));
         int magnitude = (x.abs() * 999.0).round();
 
-        if (degrees < 90 || degrees > 270) {
-          data1 = "dx${magnitude}y001e";
-        } else if (degrees > 90 || degrees < 270) {
+        if (y>0) {
+          data1 = "dx${magnitude}y100e";
+        } else if (y<=0){
           data1 = "dx${magnitude}y000e";
-        } else if (0 < degrees || degrees <= 180) {
-          //data2 = "sx${x}ye";
-        } else if (degrees > 180) {
-          //data2 = "sx000y000e";
         }
         //int steer_direction = ((x*499)+499).round() ;
         //int steer = ((y * 499) + 499).round();
