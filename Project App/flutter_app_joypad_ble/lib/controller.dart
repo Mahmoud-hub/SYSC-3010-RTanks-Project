@@ -14,8 +14,10 @@ import 'package:firebase_database/firebase_database.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 bool stubTest = false;
 String name = "";
-int turretX = 500;
-int turretY = 90;
+int turretX = 9;
+int turretY = 91;
+int steerX = 9;
+int steerY = 91;
 
 /* Future<void> main() async {
   await SystemChrome.setPreferredOrientations(
@@ -205,7 +207,7 @@ class _JoyPadState extends State<JoyPad> {
     String data3 = "";
     JoystickDirectionCallback onDirectionChanged(
         double degrees, double distance) {
-      if (count < 5) {
+      if (count > 10) {
         if (degrees < 90) {
           degrees = 270 + degrees;
         } else {
@@ -216,16 +218,13 @@ class _JoyPadState extends State<JoyPad> {
         int magnitude = (x.abs() * 999.0).round();
 
         if (degrees < 90 || degrees > 270) {
-          data1 = "dx000y001e";
-        } 
-        else if (degrees > 90 || degrees < 270) {
-          data1 = "dx000y000e";
-        }
-        else if (0< degrees ||degrees <=180){
-          data2 = "sx000y001e";
-        }
-        else if (degrees >180){
-          data2 = "sx000y000e";
+          data1 = "dx${magnitude}y001e";
+        } else if (degrees > 90 || degrees < 270) {
+          data1 = "dx${magnitude}y000e";
+        } else if (0 < degrees || degrees <= 180) {
+          //data2 = "sx${x}ye";
+        } else if (degrees > 180) {
+          //data2 = "sx000y000e";
         }
         //int steer_direction = ((x*499)+499).round() ;
         //int steer = ((y * 499) + 499).round();
@@ -233,7 +232,7 @@ class _JoyPadState extends State<JoyPad> {
         //String data2 = "sx${x}y${y}e";
 
         if (stubTest == false) {
-          writeData(data2);
+          //writeData(data2);
           sleep(const Duration(milliseconds: 1));
           writeData(data1);
         }
@@ -243,8 +242,7 @@ class _JoyPadState extends State<JoyPad> {
           });
         }
         count = 0;
-      }
-      else {
+      } else {
         count++;
       }
     }
@@ -253,27 +251,39 @@ class _JoyPadState extends State<JoyPad> {
         int buttonIndex, Gestures gesture) {
       String data = "";
       if (buttonIndex == 0) {
-        if (turretX > 0) {
-          turretX -= 100;
-          turretY -= 10;
+        if (steerX < 700) {
+          steerX += 100;
+          //steerY += 10;
         }
-      }
-      if (buttonIndex == 1) {}
-      if (buttonIndex == 2) {
-        if (turretX < 900) {
-          turretX += 100;
-          turretY += 10;
+      } else if (buttonIndex == 1) {
+        if (steerX > 150) {
+          steerX -= 100;
+          //steerY -= 10;
+        }
+      } else if (buttonIndex == 2) {
+        if (turretX > 100) {
+          turretX -= 100;
+          //turretY += 10;
         }
         //data = "tx900y800e";
+      } else if (buttonIndex == 3) {
+        if (turretX < 700) {
+          turretX += 100;
+          //turretY += 10;
+        }
       }
+      String data2 = "sx${steerX}y999e";
       data = "tx${turretX}y999e";
-      if (buttonIndex == 3) {
-        //data = "b";
-        //disconnectFromDevice();
-      }
-
+      
       if (stubTest == false) {
+        if (buttonIndex<=1){
+        writeData(data2);
+      }
+      if (buttonIndex>=2){
         writeData(data);
+      }     
+        
+        
       }
       if (stubTest == true) {
         setState(() {
