@@ -1,6 +1,10 @@
 void moveTurret(int x, int y) {
+  //This function is used to change the angle of the turret on the tank
+  //The turret is implemented using a servo motor
+  
+  //Parameters
   //x -> value (0 -> 999)
-  //y -> 999
+  //y -> 9995
   
   //Output to serial monitor to confirm values (testing)
   output("Moving turret to:X:  ");
