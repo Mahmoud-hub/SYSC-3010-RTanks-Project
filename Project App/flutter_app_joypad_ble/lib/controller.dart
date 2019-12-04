@@ -189,7 +189,13 @@ class _JoyPadState extends State<JoyPad> {
     });
   }
 
-  readData() {}
+  readData() async {
+    var descriptors = targetCharacteristic.descriptors;
+    for (BluetoothDescriptor d in descriptors) {
+      List<int> value = await d.read();
+      print(value);
+    }
+  }
 
   writeData(String data) {
     if (targetCharacteristic == null) return;
@@ -217,9 +223,9 @@ class _JoyPadState extends State<JoyPad> {
         double x = (distance * cos(degrees * pi / 180.0));
         int magnitude = (x.abs() * 999.0).round();
 
-        if (y>0) {
+        if (y > 0) {
           data1 = "dx${magnitude}y100e";
-        } else if (y<=0){
+        } else if (y <= 0) {
           data1 = "dx${magnitude}y000e";
         }
         //int steer_direction = ((x*499)+499).round() ;
@@ -270,16 +276,14 @@ class _JoyPadState extends State<JoyPad> {
       }
       String data2 = "sx${steerX}y999e";
       data = "tx${turretX}y999e";
-      
+
       if (stubTest == false) {
-        if (buttonIndex<=1){
-        writeData(data2);
-      }
-      if (buttonIndex>=2){
-        writeData(data);
-      }     
-        
-        
+        if (buttonIndex <= 1) {
+          writeData(data2);
+        }
+        if (buttonIndex >= 2) {
+          writeData(data);
+        }
       }
       if (stubTest == true) {
         setState(() {
