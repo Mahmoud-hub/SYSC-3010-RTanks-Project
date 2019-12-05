@@ -235,7 +235,6 @@ class _JoyPadState extends State<JoyPad> {
 
         if (stubTest == false) {
           //writeData(data2);
-          sleep(const Duration(milliseconds: 1));
           writeData(data1);
         }
         if (stubTest == true) {
@@ -263,14 +262,14 @@ class _JoyPadState extends State<JoyPad> {
           //steerY -= 10;
         }
       } else if (buttonIndex == 2) {
-        if (turretX > 100) {
-          turretX -= 100;
+        if (turretX < 700) {
+          turretX += 100;
           //turretY += 10;
         }
         //data = "tx900y800e";
       } else if (buttonIndex == 3) {
-        if (turretX < 700) {
-          turretX += 100;
+        if (turretX > 150) {
+          turretX -= 100;
           //turretY += 10;
         }
       }
