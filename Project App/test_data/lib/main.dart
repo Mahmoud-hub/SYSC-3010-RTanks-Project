@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MyApp());   //Runs the app
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
     return new MaterialApp(
-      home: FirebaseDemoScreen(),
+      home: Database(),   //Sets the main page when the app is executed
     );
   }
 }
 
-class FirebaseDemoScreen extends StatelessWidget {
+class Database extends StatelessWidget {
 
-  final databaseReference = FirebaseDatabase.instance.reference();
+  final databaseReference = FirebaseDatabase.instance.reference();    //Creates a variable that refers to the data inside the database, used to access the database data at any instance
 
-  int i = 0;
+  int i = 0;    //Used as an incremental value for sending data to the database
 
   @override
   Widget build(BuildContext context) {
     getData();
-    return Scaffold(
+    return Scaffold(      //Creates the contents of the app
         appBar: AppBar(
             title: Text('Firebase Database Test'),
             ),
@@ -32,29 +32,29 @@ class FirebaseDemoScreen extends StatelessWidget {
                 children: <Widget>[
 
                   RaisedButton(
-                      child: Text('Send Data'),
+                      child: Text('Send Data'),   //Creates the Send Data button
                       onPressed: () {
                         i++;
-                        createData();
+                        sendData();   //Calls the function that sends data when button is pressed
                       },
                   ),
 
                   RaisedButton(
-                      child: Text('View Data'),
+                      child: Text('View Data'),   //Creates the View Data button
                       onPressed: () {
-                        getData();
+                        getData();     //Calls the function that retrieves data when button is pressed
                       },
                   ),
                   RaisedButton(
-                      child: Text('Udate Data'),
+                      child: Text('Udate Data'),  //Creates the Update Data button
                       onPressed: () {
-                        updateData();
+                        updateData();   //Calls the function that Updates existing data when button is pressed
                       },
                   ),
                   RaisedButton(
-                      child: Text('Delete Data'),
+                      child: Text('Delete Data'), //Creates the Delete Data button
                       onPressed: () {
-                        deleteData();
+                        deleteData();   //Calls the function that deletes existing data when button is pressed
                       },
                   ),
                 ],
@@ -63,26 +63,26 @@ class FirebaseDemoScreen extends StatelessWidget {
     );
   }
 
-  void createData(){
-    databaseReference.child("games").child("$i").set({
-      'Player 1': 'Player 1 scored',
-      'Player 2': 'Player 1 killed player 2'
+  void sendData(){
+    databaseReference.child("games").child("$i").set({    //Uses the database reference variable created above to create data in the database
+      'Player 1': '0',
+      'Player 2': '0'
     });
   }
   void getData(){
-    databaseReference.once().then((DataSnapshot snapshot) {
+    databaseReference.once().then((DataSnapshot snapshot) {   //Takes a snapshot of all the data currently existing in the database and prints it
       print('Data : ${snapshot.value}');
     });
   }
 
   void updateData(){
-    databaseReference.child('games').child("$i").update({
-      'description': 'Score Updated'
+    databaseReference.child('games').child("$i").update({   //Uses the database reference variable created above to access the data in the database and updates it
+      'Player 1': '4'
     });
   }
 
   void deleteData(){
-    databaseReference.child('games').child("$i").remove();
+    databaseReference.child('games').child("$i").remove();    //Uses the database reference variable created above to access the data inside and remove it
     i--;
   }
     
