@@ -8,7 +8,7 @@ class SelectPage extends StatelessWidget {
           new Container(
             decoration: new BoxDecoration(
               image: new DecorationImage(
-                image: new AssetImage("Images/Game Background.png"),
+                image: new AssetImage("Images/GameBackground.png"),
                 fit: BoxFit.cover,
               ),
             ),

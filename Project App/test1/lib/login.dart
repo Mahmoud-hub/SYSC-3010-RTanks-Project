@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/select.dart';
 import 'flutter_fire_auth.dart';
 
 class LoginPage extends StatefulWidget {
@@ -25,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
           new Container(
             decoration: new BoxDecoration(
               image: new DecorationImage(
-                image: new AssetImage("Images/Game Background.png"),
+                image: new AssetImage("Images/GameBackground.png"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -48,11 +47,6 @@ class _LoginPageState extends State<LoginPage> {
                   bool res = await AuthProvider().loginWithGoogle();
                   if(!res)
                     print("error logging in with google");
-                  
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SelectPage()),
-                  );
                 },
               ),
               TextField(

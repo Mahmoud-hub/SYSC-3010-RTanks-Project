@@ -2,8 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:test1/controller.dart';
+import 'package:test1/home.dart';
+import 'package:test1/login.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,40 +14,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Welcome to RTanks',
-      home: HomePage(),
+      home: MainScreen(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-   @override
+class MainScreen extends StatelessWidget {
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: new Stack(children: <Widget>[
-      new Container(
-        decoration: new BoxDecoration(
-          image: new DecorationImage(
-            image: new AssetImage("Images/GameBackground.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-      Align(
-        alignment: Alignment.center,
-        child: OutlineButton(
-            child: Text('Play'),
-            borderSide: BorderSide(color: Colors.red, //Color of the border
-            style: BorderStyle.solid, //Style of the border
-            width: 0.8 //width of the border
-          ),
-            splashColor: Colors.black,
-            onPressed: () {
-              Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SelectPage()));
-            }
-        )
-      )
-        ])
+    return StreamBuilder(
+      stream: FirebaseAuth.instance.onAuthStateChanged,
+      builder: (context,AsyncSnapshot<FirebaseUser> snapshot) {
+        if(!snapshot.hasData || snapshot.data == null)
+          return LoginPage();
+        return FirstRoute();
+      },
     );
   }
 }
