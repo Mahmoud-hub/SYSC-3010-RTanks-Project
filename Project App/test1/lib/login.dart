@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'flutter_fire_auth.dart';
 
+//This page is unnessecary for the flow of the app, since the user is able to sign from clicking the first button
+//It was only used for testing purposes, which is why it is included in the project
+
 class LoginPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginPageState createState() => _LoginPageState();       //Create a login state
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> {    //Email Sign in (only for testing)
   TextEditingController _emailController;
   TextEditingController _passwordController;
 
   @override
-  void initState() {
+  void initState() {      //Email Sign in only (used for testing)
     super.initState();
     _emailController = TextEditingController(text: "");
     _passwordController = TextEditingController(text: "");
@@ -50,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
               TextField(
-                controller: _emailController,
+                controller: _emailController,   //Originally used for testing, not required anymore (email sign in)
                 decoration: InputDecoration(
                     hintText: "Enter email"
                 ),
